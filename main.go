@@ -7,7 +7,7 @@ import (
 	"time"
 	"unsafe"
 
-	"kropchar/infrastructure"
+	inf "kropchar/infrastructure"
 )
 
 const (
@@ -53,7 +53,7 @@ func main() {
 // GenerateRandSeq is a func to generate random string by general use
 func GenerateRandSeq(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandSeq]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandSeq]", now)
 
 	rand.Seed(now.UnixNano())
 
@@ -74,7 +74,7 @@ func GenerateRandSeq(randomSize int) string {
 func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcUnsafe]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcUnsafe]", now)
 
 	src := rand.NewSource(now.UnixNano())
 	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
@@ -108,7 +108,7 @@ func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 // GenerateRandStringBytesMaskImprSrcSB is a func to generate random string by byte mask, rand source, string builder
 func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcSB]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcSB]", now)
 
 	src := rand.NewSource(now.UnixNano())
 	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
@@ -139,7 +139,7 @@ func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 // GenerateRandomStringBytesMask is a func to generate random string by byte mask
 func GenerateRandomStringBytesMask(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandomStringBytesMask]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandomStringBytesMask]", now)
 
 	byteData := make([]byte, randomSize)
 
@@ -158,7 +158,7 @@ func GenerateRandomStringBytesMask(randomSize int) string {
 // GenerateRandomByteString is a func to generate random string by byte
 func GenerateRandomByteString(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandomByteString]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandomByteString]", now)
 
 	charset := bulkLetter
 	seededRand := rand.New(rand.NewSource(now.UnixNano()))
@@ -174,7 +174,7 @@ func GenerateRandomByteString(randomSize int) string {
 // GenerateRandomRemainderString is a func to generate random string by remainder int64
 func GenerateRandomRemainderString(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandomRemainderString]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandomRemainderString]", now)
 
 	byteData := make([]byte, randomSize)
 	for i := range byteData {
@@ -192,7 +192,7 @@ func GenerateRandomRemainderString(randomSize int) string {
 // GenerateRandStringBytesMaskImprSrc is a func to generate random string by bytes mask random
 func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrc]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrc]", now)
 
 	src := rand.NewSource(now.UnixNano())
 	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
@@ -222,7 +222,7 @@ func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 // GenerateRandomRuneString is a func to generate random string by rune
 func GenerateRandomRuneString(randomSize int) string {
 	now := time.Now()
-	defer infrastructure.EvaluateProcessTime("[GenerateRandomRuneString]", now)
+	defer inf.EvaluateProcessTime("[GenerateRandomRuneString]", now)
 
 	rand.Seed(now.UnixNano())
 
