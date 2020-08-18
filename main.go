@@ -27,6 +27,7 @@ const (
 )
 
 func main() {
+	// define size of random string
 	lengthNumber := 32
 
 	// example
