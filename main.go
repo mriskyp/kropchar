@@ -146,6 +146,7 @@ func GenerateRandomStringBytesMask(randomSize int) string {
 		}
 	}
 
+	// return byteData as string
 	return string(byteData)
 }
 
@@ -160,7 +161,7 @@ func GenerateRandomByteString(randomSize int) string {
 		byteData[i] = charset[seededRand.Intn(len(charset))]
 	}
 
-	// stringify return as string
+	// return byteData as string
 	return string(byteData)
 }
 
@@ -177,6 +178,7 @@ func GenerateRandomRemainderString(randomSize int) string {
 		byteData[i] = bulkLetter[indexRemainder]
 	}
 
+	// return byteData as string
 	return string(byteData)
 }
 
@@ -223,5 +225,6 @@ func GenerateRandomRuneString(randomSize int) string {
 	// E.g. "ExcbsVQs"
 	str := builder.String()
 
+	// return byteData as string
 	return str
 }
