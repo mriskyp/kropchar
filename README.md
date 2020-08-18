@@ -11,7 +11,6 @@ import to your code
 go get "github.com/mriskyp/kropchar"
 ```
 
-
 call generate random string on your code:
    in millisecond and microsecond
    ```
