@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"kropchar/infrastructure"
 	"math/rand"
 	"strings"
 	"time"
 	"unsafe"
+
+	"kropchar/infrastructure"
 )
 
 const (

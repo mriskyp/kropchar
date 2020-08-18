@@ -1,8 +1,10 @@
-package interface
+package interfaces
 
-import "time"
+import (
+	"time"
+)
 
-type IEvaluate interface {
+type Evaluate interface {
 	// config time
 	EvaluateProcessTime(funcName string, start time.Time) string
 }
