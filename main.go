@@ -197,7 +197,9 @@ func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 		if remain == 0 {
 			cache, remain = srcInt63, letterIndexMax
 		}
-		if idx := int(cache & letterIndexMask); idx < len(bulkLetter) {
+
+		idx := int(cache & letterIndexMask)
+		if idx < len(bulkLetter) {
 			byteData[i] = bulkLetter[idx]
 			i--
 		}
@@ -219,10 +221,10 @@ func GenerateRandomRuneString(randomSize int) string {
 
 	var builder strings.Builder
 	for i := 0; i < randomSize; i++ {
-		builder.WriteRune(charset[rand.Intn(len(charset))])
+		index := rand.Intn(len(charset))
+		builder.WriteRune(charset[index])
 	}
 
-	// E.g. "ExcbsVQs"
 	str := builder.String()
 
 	// return byteData as string
