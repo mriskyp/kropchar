@@ -15,101 +15,111 @@ const (
 	bulkUpperletter  = "abcdefghijklmnopqrstuvwxyz"
 	bulkNumberLetter = "0123456789"
 	bulkLetter       = bulkLowerLetter + bulkUpperletter + bulkNumberLetter
-
-	/**
-	-6 bits to represent a letter index
-	-All 1-bits, as many as letterIndexBits
-	-# of letter indices fitting in 63 bits
-	*/
-	letterIndexBits = 6
-	letterIndexMask = 1<<letterIndexBits - 1
-	letterIndexMax  = 63 / letterIndexBits
+	letterIndexBits  = 6
+	letterIndexMask  = 1<<letterIndexBits - 1
+	letterIndexMax   = 63 / letterIndexBits
 )
 
 func main() {
 	// define size of random string
-	lengthNumber := 32
+	randomSize := 32
 
 	// example
-	str := GenerateRandomRuneString(lengthNumber)
+	str := GenerateRandomRuneString(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandomByteString(lengthNumber)
+	str = GenerateRandomByteString(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandomRemainderString(lengthNumber)
+	str = GenerateRandomRemainderString(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandomStringBytesMask(lengthNumber)
+	str = GenerateRandomStringBytesMask(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandStringBytesMaskImprSrc(lengthNumber)
+	str = GenerateRandStringBytesMaskImprSrc(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandStringBytesMaskImprSrcSB(lengthNumber)
+	str = GenerateRandStringBytesMaskImprSrcSB(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandStringBytesMaskImprSrcUnsafe(lengthNumber)
+	str = GenerateRandStringBytesMaskImprSrcUnsafe(randomSize)
 	fmt.Println(str)
 
-	str = GenerateRandSeq(lengthNumber)
+	str = GenerateRandSeq(randomSize)
 	fmt.Println(str)
 }
 
-func GenerateRandSeq(n int) string {
+func GenerateRandSeq(randomSize int) string {
 	now := time.Now()
-
 	defer infrastructure.EvaluateProcessTime("[GenerateRandSeq]", now)
 
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(now.UnixNano())
+
 	letters := []rune(bulkLetter)
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+	// Size rune bulk letter
+	size := len(letters)
+
+	byteData := make([]rune, randomSize)
+	for i := range byteData {
+		byteData[i] = letters[rand.Intn(size)]
 	}
 
-	return string(b)
+	// Return byte data as string
+	return string(byteData)
 }
-func GenerateRandStringBytesMaskImprSrcUnsafe(n int) string {
+func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 
 	now := time.Now()
-
 	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcUnsafe]", now)
 
-	src := rand.NewSource(time.Now().UnixNano())
+	src := rand.NewSource(now.UnixNano())
+	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
+	srcInt63 := src.Int63()
 
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIndexMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIndexMax; i >= 0; {
+	byteData := make([]byte, randomSize)
+
+	// Generates 63 random bits, enough for letterIndexMax characters!
+	for i, cache, remain := (randomSize - 1), srcInt63, letterIndexMax; i >= 0; {
 		if remain == 0 {
-			cache, remain = src.Int63(), letterIndexMax
+			cache, remain = srcInt63, letterIndexMax
 		}
-		if idx := int(cache & letterIndexMask); idx < len(bulkLetter) {
-			b[i] = bulkLetter[idx]
+
+		idx := int(cache & letterIndexMask)
+		if idx < len(bulkLetter) {
+			byteData[i] = bulkLetter[idx]
 			i--
 		}
+
 		cache >>= letterIndexBits
 		remain--
 	}
 
-	stringTemp := *(*string)(unsafe.Pointer(&b))
+	//  pointers without the restrictions made for safe pointers
+	unsf := unsafe.Pointer(&byteData)
+	stringTemp := *(*string)(unsf)
 
 	return stringTemp
 }
 
-func GenerateRandStringBytesMaskImprSrcSB(n int) string {
+func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 	now := time.Now()
-
 	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcSB]", now)
 
-	src := rand.NewSource(time.Now().UnixNano())
+	src := rand.NewSource(now.UnixNano())
+	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
+	srcInt63 := src.Int63()
 
+	// A string builder
 	sb := strings.Builder{}
-	sb.Grow(n)
-	// A src.Int63() generates 63 random bits, enough for letterIndexMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIndexMax; i >= 0; {
+
+	// Increase size of inner capacity to value capacity
+	sb.Grow(randomSize)
+
+	// Generates 63 random bits, enough for letterIndexMax characters!
+	for i, cache, remain := randomSize-1, srcInt63, letterIndexMax; i >= 0; {
 		if remain == 0 {
-			cache, remain = src.Int63(), letterIndexMax
+			cache, remain = srcInt63, letterIndexMax
 		}
 		if idx := int(cache & letterIndexMask); idx < len(bulkLetter) {
 			sb.WriteByte(bulkLetter[idx])
@@ -122,86 +132,96 @@ func GenerateRandStringBytesMaskImprSrcSB(n int) string {
 	return sb.String()
 }
 
-func GenerateRandomStringBytesMask(n int) string {
+func GenerateRandomStringBytesMask(randomSize int) string {
 	now := time.Now()
-
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomStringBytesMask]", now)
 
-	b := make([]byte, n)
-	for i := 0; i < n; {
-		if idx := int(rand.Int63() & letterIndexMask); idx < len(bulkLetter) {
-			b[i] = bulkLetter[idx]
+	byteData := make([]byte, randomSize)
+
+	for i := 0; i < randomSize; {
+		randInt63 := rand.Int63()
+		if idx := int(randInt63 & letterIndexMask); idx < len(bulkLetter) {
+			byteData[i] = bulkLetter[idx]
 			i++
 		}
 	}
 
-	return string(b)
+	return string(byteData)
 }
 
-func GenerateRandomByteString(length int) string {
+func GenerateRandomByteString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomByteString]", now)
 
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
-	b := make([]byte, length)
-	for i := range b {
-		b[i] = charset[seededRand.Intn(len(charset))]
+	charset := bulkLetter
+	seededRand := rand.New(rand.NewSource(now.UnixNano()))
+	byteData := make([]byte, randomSize)
+	for i := range byteData {
+		byteData[i] = charset[seededRand.Intn(len(charset))]
 	}
 
-	return string(b)
+	// stringify return as string
+	return string(byteData)
 }
 
-func GenerateRandomRemainderString(n int) string {
+func GenerateRandomRemainderString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomRemainderString]", now)
 
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = bulkLetter[rand.Int63()%int64(len(bulkLetter))]
+	byteData := make([]byte, randomSize)
+	for i := range byteData {
+		size := len(bulkLetter)
+		randInt63 := rand.Int63()
+
+		indexRemainder := randInt63 % int64(size)
+		byteData[i] = bulkLetter[indexRemainder]
 	}
 
-	return string(b)
+	return string(byteData)
 }
 
-func GenerateRandStringBytesMaskImprSrc(n int) string {
+func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrc]", now)
 
-	src := rand.NewSource(time.Now().UnixNano())
+	src := rand.NewSource(now.UnixNano())
+	// Int63 returns a non-negative pseudo-random 63-bit integer as an int64 from the default Source.
+	srcInt63 := src.Int63()
 
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIndexMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIndexMax; i >= 0; {
+	byteData := make([]byte, randomSize)
+
+	// Generates 63 random bits, enough for letterIndexMax characters!
+	for i, cache, remain := (randomSize - 1), srcInt63, letterIndexMax; i >= 0; {
 		if remain == 0 {
-			cache, remain = src.Int63(), letterIndexMax
+			cache, remain = srcInt63, letterIndexMax
 		}
 		if idx := int(cache & letterIndexMask); idx < len(bulkLetter) {
-			b[i] = bulkLetter[idx]
+			byteData[i] = bulkLetter[idx]
 			i--
 		}
 		cache >>= letterIndexBits
 		remain--
 	}
 
-	return string(b)
+	//Return byte as string
+	return string(byteData)
 }
 
-func GenerateRandomRuneString(length int) string {
+func GenerateRandomRuneString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomRuneString]", now)
 
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(now.UnixNano())
 
-	chars := []rune(bulkLetter)
+	charset := []rune(bulkLetter)
 
-	var b strings.Builder
-	for i := 0; i < length; i++ {
-		b.WriteRune(chars[rand.Intn(len(chars))])
+	var builder strings.Builder
+	for i := 0; i < randomSize; i++ {
+		builder.WriteRune(charset[rand.Intn(len(charset))])
 	}
 
 	// E.g. "ExcbsVQs"
-	str := b.String()
+	str := builder.String()
 
 	return str
 }
