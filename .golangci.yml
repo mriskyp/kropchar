@@ -1,0 +1,39 @@
+# .golangci.yml
+
+run: 
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters:
+  disable-all: true
+  enable:
+    - govet 
+    - bodyclose 
+    - gofmt  
+    - goimports 
+    - goprintffuncname 
+    - interfacer 
+    - nakedret 
+    - unparam
+    - dogsled 
+    - unconvert
+    - deadcode 
+    - goconst 
+    - asciicheck 
+    - godox
+    - varcheck 
+    - golint
+    - gocritic
+
+
+linters-settings:
+  govet:
+    check-shadowing: true
+  lll:
+    line-length: 200
+    tab-width: 1
+
+issues:
+  exclude-use-default: false

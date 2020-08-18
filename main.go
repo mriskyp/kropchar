@@ -50,6 +50,7 @@ func main() {
 	fmt.Println(str)
 }
 
+// GenerateRandSeq is a func to generate random string by general use
 func GenerateRandSeq(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandSeq]", now)
@@ -68,6 +69,8 @@ func GenerateRandSeq(randomSize int) string {
 	// Return byte data as string
 	return string(byteData)
 }
+
+// GenerateRandStringBytesMaskImprSrcUnsafe is a func to generate random string by byte mask, rand source unsafe type pointer
 func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 
 	now := time.Now()
@@ -102,6 +105,7 @@ func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 	return stringTemp
 }
 
+// GenerateRandStringBytesMaskImprSrcSB is a func to generate random string by byte mask, rand source, string builder
 func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrcSB]", now)
@@ -132,6 +136,7 @@ func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 	return sb.String()
 }
 
+// GenerateRandomStringBytesMask is a func to generate random string by byte mask
 func GenerateRandomStringBytesMask(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomStringBytesMask]", now)
@@ -150,6 +155,7 @@ func GenerateRandomStringBytesMask(randomSize int) string {
 	return string(byteData)
 }
 
+// GenerateRandomByteString is a func to generate random string by byte
 func GenerateRandomByteString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomByteString]", now)
@@ -165,6 +171,7 @@ func GenerateRandomByteString(randomSize int) string {
 	return string(byteData)
 }
 
+// GenerateRandomRemainderString is a func to generate random string by remainder int64
 func GenerateRandomRemainderString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomRemainderString]", now)
@@ -182,6 +189,7 @@ func GenerateRandomRemainderString(randomSize int) string {
 	return string(byteData)
 }
 
+// GenerateRandStringBytesMaskImprSrc is a func to generate random string by bytes mask random
 func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandStringBytesMaskImprSrc]", now)
@@ -211,6 +219,7 @@ func GenerateRandStringBytesMaskImprSrc(randomSize int) string {
 	return string(byteData)
 }
 
+// GenerateRandomRuneString is a func to generate random string by rune
 func GenerateRandomRuneString(randomSize int) string {
 	now := time.Now()
 	defer infrastructure.EvaluateProcessTime("[GenerateRandomRuneString]", now)
