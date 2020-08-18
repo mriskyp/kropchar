@@ -1,8 +1,6 @@
 # kropchar
 kropchar is implement how many ways to generate random string and evaluate it
-we will evaluate any random string by length, and by type, example from rune, byte, mask, etc
 
-## how to implement it:
 
 ignore main.go, as it only use as example
 
