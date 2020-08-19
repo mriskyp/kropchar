@@ -133,6 +133,7 @@ func GenerateRandStringBytesMaskImprSrcSB(randomSize int) string {
 		remain--
 	}
 
+	// return string builder string
 	return sb.String()
 }
 
