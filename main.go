@@ -81,7 +81,6 @@ func GenerateRandStringBytesMaskImprSrcUnsafe(randomSize int) string {
 	srcInt63 := src.Int63()
 
 	byteData := make([]byte, randomSize)
-
 	// Generates 63 random bits, enough for letterIndexMax characters!
 	for i, cache, remain := (randomSize - 1), srcInt63, letterIndexMax; i >= 0; {
 		if remain == 0 {
