@@ -6,7 +6,7 @@ ignore main.go, as it only use as example
 
 import to your code
 ```
-go get "github.com/mriskyp/kropchar"
+go get github.com/mriskyp/kropchar
 ```
 
 call generate random string on your code:
